@@ -1,42 +1,54 @@
 import {Rover} from "./rover";
 
 interface Command {
-  execute: () => void;
+    execute: () => void;
 }
 
 class RotateLeft implements Command {
-  constructor(private rover: Rover) {
-  }
+    constructor(private rover: Rover) {
+    }
 
-  execute() {
-    this.rover.rotateLeft();
-  }
+    execute() {
+        this.rover.rotateLeft();
+    }
 }
 
 class RotateRight implements Command {
-  constructor(private rover: Rover) {}
+    constructor(private rover: Rover) {
+    }
 
-  execute() {
-    this.rover.rotateRight();
-  }
+    execute() {
+        this.rover.rotateRight();
+    }
 }
 
-class Move implements Command { 
-  constructor(private rover: Rover) {}
+class Move implements Command {
+    constructor(private rover: Rover) {
+    }
 
-  execute() {
-    this.rover.move();
-  }
+    execute() {
+        this.rover.move();
+    }
 }
+
+const buildCommand = (rover: Rover) => {
+    const rotateLeft = new RotateLeft(rover);
+    const rotateRight = new RotateRight(rover);
+    const move = new Move(rover);
+
+    return (command: string) => {
+        if (command === 'L') return rotateLeft;
+        if (command === 'R') return rotateRight;
+        if (command === 'M') return move;
+    }
+};
 
 export function navigateRover(commands: string): string {
-  const rover = new Rover();
+    const rover = new Rover();
 
-  [...commands].forEach(command => {
-    if (command === 'L') { new RotateLeft(rover).execute(); }
-    if (command === 'R') { new RotateRight(rover).execute(); }
-    if (command === 'M') { new Move(rover).execute(); }
-  });
+    [...commands]
+        .map(buildCommand(rover))
+        .forEach(command => command?.execute());
 
-  return rover.getPosition();
+    return rover.getPosition();
 }
