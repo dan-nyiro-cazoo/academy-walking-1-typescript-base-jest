@@ -1,5 +1,4 @@
 import {Rover} from "./rover";
-import {lookup} from "dns";
 
 interface Command {
     execute: () => void;
@@ -32,12 +31,22 @@ class Move implements Command {
     }
 }
 
+class Undo implements Command {
+  constructor(private rover: Rover) {}
+
+  execute() {
+    history.pop().undo();
+    this.rover.rotateRight();
+  }
+}
+
 const buildCommand = (rover: Rover) => {
-    type ApprovedCommands = `L` | `R` | `M`; // TODO refactor after launch
+    type ApprovedCommands = `L` | `R` | `M` | `U`; // TODO refactor after launch
     const lookupTable: Record<ApprovedCommands, Command> = {
         L: new RotateLeft(rover),
         R: new RotateRight(rover),
-        M: new Move(rover)
+        M: new Move(rover),
+        U: new Undo(rover)
     };
 
     return (command: string): Command | undefined => {

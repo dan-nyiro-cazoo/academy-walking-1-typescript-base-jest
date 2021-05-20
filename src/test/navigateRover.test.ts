@@ -47,4 +47,15 @@ describe("Navigate Rover", () => {
       }
     );
   });
+
+  describe("when sending undo commands", () => {
+    it.each([
+      ["LU", "0:0:N"],
+      ["RU", "0:0:N"]
+    ])(
+      "for commands '%s' should return position '%s'",
+      (command, expectedPosition) => {
+        expect(navigateRover(command)).toEqual(expectedPosition);
+      })
+  })
 });
