@@ -7,13 +7,44 @@ describe("Navigate Rover", () => {
     });
   });
 
-  describe('when sending a command', () => {
-      it.each([
-          ['L', "0:0:W"],
-          ['R', "0:0:E"],
-          ['M', "0:1:N"],
-      ])("for command '%s' should return position '%s'", (command, expectedPosition) => {
-        expect(navigateRover(command)).toEqual(expectedPosition)
-      });
+  describe("when sending move commands", () => {
+    it.each([
+      ["M", "0:1:N"],
+      ["MM", "0:2:N"],
+      [ "M".repeat(12), "0:2:N"],
+    ])(
+      "for command '%s' should return position '%s'",
+      (command, expectedPosition) => {
+        expect(navigateRover(command)).toEqual(expectedPosition);
+      }
+    );
+  });
+
+  describe("when sending left commands", () => {
+    it.each([
+      ["L", "0:0:W"],
+      ["LL", "0:0:S"],
+      ["LLL", "0:0:E"],
+      ["LLLL", "0:0:N"],
+    ])(
+      "for command '%s' should return position '%s'",
+      (command, expectedPosition) => {
+        expect(navigateRover(command)).toEqual(expectedPosition);
+      }
+    );
+  });
+
+  describe("when sending right commands", () => {
+    it.each([
+      ["R", "0:0:E"],
+      ["RR", "0:0:S"],
+      ["RRR", "0:0:W"],
+      ["RRRR", "0:0:N"],
+    ])(
+      "for command '%s' should return position '%s'",
+      (command, expectedPosition) => {
+        expect(navigateRover(command)).toEqual(expectedPosition);
+      }
+    );
   });
 });
